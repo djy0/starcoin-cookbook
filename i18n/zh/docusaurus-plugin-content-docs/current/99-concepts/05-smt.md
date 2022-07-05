@@ -40,10 +40,10 @@ State 包括合约代码( CODE )和资源( RESOURCE )，余额相关信息都在
 A 的2进制路径为00010100，每4个 bit 压缩后变成0x14，
 B 的2进制路径为00011010，压缩后为0x1A，
 C 的2进制路径为00011111，压缩后为0x1F，
-D 的2进制路径为11101100，压缩后为0xDC，
+D 的2进制路径为11011100，压缩后为0xDC，
 这里每4个 bit 压缩叫做一个 Nibble，
 Merkle Tree 可以认为是基数等于2的基数树，图中右边可以认为是基数等于16的基数树，
-SMT 就是基于基数16的基数树(这里简称为 Radix16)，这个设计的优点就是降低树的高度，减少内存访问次数，降低内存，
+SMT 就是基于基数16的基数树(这里简称为 Radix16)，这个设计的优点就是降低树的高度，减少内存访问次数，降低内存占用，
 这种 Radix Tree 目前有些优化手段比如 ADAPTIVE RADIX TREE (Starcoin中固定为 node16)， 论文(https://db.in.tum.de/~leis/papers/ART.pdf) 有更多内容，
 还有其他一些 Radix Tree 优化思路，比如以太坊使用的是改进版本的 Patricia Radix Tree (https://eth.wiki/fundamentals/patricia-tree)，
 还有 HAT RADIX TREE， 这些这里不介绍
@@ -97,8 +97,8 @@ pub trait RawKey: Clone + Ord {
 pub struct LeafNode<K: RawKey> {
     /// The origin key associated with this leaf node's Blob.
     #[serde(
-    deserialize_with = "deserialize_raw_key",
-    serialize_with = "serialize_raw_key"
+        deserialize_with = "deserialize_raw_key",
+        serialize_with = "serialize_raw_key"
     )]
     raw_key: K,
     /// The hash of the blob.
@@ -109,7 +109,7 @@ pub struct LeafNode<K: RawKey> {
     cached_hash: Cell<Option<HashValue>>,
 }
 ```
-Child 的定义可以看到只存储了 Hash 值，Value 通过 `KvStore.get(Hash)`  获取， 然后再反序列化确定是 InternalNode 还是 LeafNode。
+可以看到 Child 的定义只存储了 Hash 值，Value 通过 `KvStore.get(Hash)` 获取， 然后再反序列化确定是 InternalNode 还是 LeafNode
 
 下面说明下各个操作流程
 ## 在空树种创建 LeafNode 例子
@@ -183,7 +183,7 @@ pub fn new(TreeReader: &'a) -> Self {
     
 }
 ```
-这里 TreeReader 是一个 trait (可以认为是类似 Java 中 inteface )， 在 Starcoin 中是提供 Key Value 操作的数据结构，
+这里 TreeReader 是一个 trait (可以认为是类似 Java 中 interface )， 在 Starcoin 中是提供 Key Value 操作的数据结构，
 在 Starcoin 中对应的 KvStore 是 RocksDB， MockTreeStore 中使是 HashMap + BTeeSet，
 有 TreeReader 就有 TreeWriter，这里 TreeReader 对应的是 SMT 的查找和在内存中的计算， TreeWriter 对应的是持久化到 KvStore 操作，
 Starcoin 持久层并没有实现 TreeWriter trait，现在直接写 KvStore(这部分需要结合 代码中StateDB 的 flush 来理解)， Mock 操作的 MockTreeStore 使用了 TreeWriter。

@@ -17,7 +17,7 @@ curl -s https://raw.githubusercontent.com/starcoinorg/starcoin-framework/main/sc
 
 ### 通过预编译二进制包安装
 
-从 [starcoiorg/starcoin](https://github.com/starcoinorg/starcoin) 的发布页面下载 `mpm-[your_os]-latest.zip` 并解压，然后手动添加到 PATH。
+从 [starcoinorg/starcoin](https://github.com/starcoinorg/starcoin) 的发布页面下载 `mpm-[your_os]-latest.zip` 并解压，然后手动添加到 PATH。
 
 ### 从源码编译安装
 
