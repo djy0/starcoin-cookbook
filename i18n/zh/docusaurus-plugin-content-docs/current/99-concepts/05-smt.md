@@ -1,6 +1,6 @@
 # Sparse Merkle Tree
 
-要了解为什么用Sparse Merkle Tree (下面简称 SMT )，先需要了解下 [Merkle Tree](00-merkletree.md)
+要了解为什么用Sparse Merkle Tree (下面简称 SMT )，需要先了解下 [Merkle Tree](00-merkletree.md)
 
 ## SMT
 
